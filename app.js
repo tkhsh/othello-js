@@ -1,10 +1,14 @@
 $(function() {
 	// オセロ盤のglobal変数
 	var board = new Array(16);
-	// オセロ盤のすべての値を" "で初期化
+	// オセロ盤を初期化
 	for(var i = 0; i < board.length; i++) {
 		board[i] = "□";
 	}
+	board[5] = "○";
+	board[6] = "●";
+	board[9] = "●";
+	board[10] = "○";
 
 	// オセロ盤を表示する
 	function draw() {
