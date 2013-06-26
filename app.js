@@ -20,5 +20,22 @@ $(function() {
 		document.getElementById("display").innerHTML = boardStr;
 	}
 
+	var turn = true; // 順番を判定するフラグ
+	$('#snap').click(function () {
+		// TODO: エラーのチェック機能を追加する（1.valueは1~16までの数でなければならない 2.同じ場所には置けない）
+		var position = document.getElementById("position").value;
+
+		//白の番か黒の番かを判定
+		if(turn) {
+			board[position] = "●";
+			turn = false;
+		} else {
+			board[position] = "○";
+			turn = true;
+		}
+
+		draw();
+	});
+
 	draw();
 });
