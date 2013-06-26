@@ -22,7 +22,7 @@ $(function() {
 
 	var turn = true; // 順番を判定するフラグ
 	$('#snap').click(function () {
-		// TODO: エラーのチェック機能を追加する（1.valueは1~16までの数でなければならない 2.同じ場所には置けない）
+		// TODO: エラーのチェック機能を追加する（1.valueは0~15までの数でなければならない 2.同じ場所には置けない）
 		var position = document.getElementById("position").value;
 
 		//白の番か黒の番かを判定
