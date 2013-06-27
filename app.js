@@ -52,15 +52,24 @@ $(function() {
 		if(turn) {
 			if(flipDetection(position, true)) {
 				board[position] = "●";
+				flip(position, true)
 				turn = false;
 				document.getElementById("turn").innerHTML = "白の番です。"
 			}
 		} else {
+			/*
 			if(flipDetection(position, false)) {
 				board[position] = "○";
+				flip(position, false)
 				turn = true;
 				document.getElementById("turn").innerHTML = "黒の番です。"
 			}
+			*/
+			var bestPos = searchBestMove();
+			board[bestPos] = "○";
+			flip(bestPos, false);
+			turn = true;
+			document.getElementById("turn").innerHTML = "黒の番です。"
 		}
 
 		draw();
@@ -68,6 +77,9 @@ $(function() {
 
 	//石がひっくり返るか判定
 	function flipDetection(stonePos, myStoneColor) {
+		if(board[stonePos] != "□") {
+			return false;
+		}
 		var myStone;
 		var oppositeStone;
 		if(myStoneColor == true) {
@@ -79,6 +91,7 @@ $(function() {
 		}
 
 		var canSnap = false; // 石がおけるか？
+		
 
 		for(var dx = -1; dx <= 1; dx++) {
 			for(var dy = -1; dy <= 1; dy++) {
@@ -122,10 +135,11 @@ $(function() {
 	}
 
 	function searchBestMove() {
-		var bestMove; //　最もいい手を記録する
+		var bestMove; //　最もいい手を記録する flipDetection(i, false)
 		var avairableMove = [];
 		for(var i = 0; i < board.length; i++) {
-			if(flipDetection(i, turn)) {
+			if(flipDetection(i, false)) {
+				console.log(i);
 				avairableMove.push(i);
 			}
 		}
@@ -149,10 +163,61 @@ $(function() {
 		return bestMove;
 	}
 
-	function flip(differentStones, myStone) { //未完成（バグあり）
+	function flip(movePos, myStoneColor) {
+		/*
 		for(var i = 0; i < differentStones.length; i++) {
 			var tmp = differentStones[i];
 			board[tmp] = myStone;
+		}
+		*/
+		var myStone;
+		var oppositeStone;
+		if(myStoneColor == true) {
+			myStone = "●";
+			oppositeStone = "○";
+		} else　if(myStoneColor == false) {
+			myStone = "○";
+			oppositeStone = "●";
+		}
+
+		for(var dx = -1; dx <= 1; dx++) {
+			for(var dy = -1; dy <= 1; dy++) {
+				var posX = movePos%boardSize;
+				var posY = Math.floor(movePos/boardSize); // 整数の値をとる
+				var isContinueSearch = true;
+				var differentStones = [];
+
+				while(isContinueSearch) {
+					posX += dx;
+					posY += dy;
+
+					if(posX < 0 || posX > boardSize) { //端まできたときにsearchを終了
+						break;
+					} else if (posY < 0 || posY > boardSize) {
+						break;
+					}
+
+					var boardNum = posY*boardSize + posX%boardSize;
+					console.log(" boardNum:" + boardNum);
+
+					if(board[boardNum] == oppositeStone) { // 検索結果が異なる色なら
+						differentStones.push(boardNum);
+						//同じ方向にもう一マス進み、検索する。
+
+					} else if(board[boardNum] == myStone) { // 検索結果が同じ色なら
+						isContinueSearch = false;
+						if(differentStones.length != 0) {
+							// canSnap = true;
+							for(var i = 0; i < differentStones.length; i++) {
+								var tmp = differentStones[i];
+								board[tmp] = myStone;
+							}
+						}
+					} else { // 間にスペースのある場合
+						isContinueSearch = false;	// 石が置けない
+					}
+				}
+			}
 		}
 	}
 
