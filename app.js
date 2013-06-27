@@ -149,12 +149,12 @@ $(function() {
 		for(var i = 0; i < avairableMove.length-1; i++) {
 			var tmpY1 = Math.floor(avairableMove[i]/boardSize);
 			var tmpY2 = Math.floor(avairableMove[i+1]/boardSize);
-			if(tmp1 > tmp2) {
+			if(tmpY1 > tmpY2) {
 				bestMove = avairableMove[i+1];
-			} else if (tmp1 == tmp2) {
+			} else if (tmpY1 == tmpY2) {
 				var tmpX1 = avairableMove[i] % boardSize;
 				var tmpX2 = avairableMove[i+1] % boardSize;
-				if(tmpx1 > tmpx2) {
+				if(tmpX1 > tmpX2) {
 					bestMove = avairableMove[i+1];
 				}
 			}
