@@ -121,32 +121,32 @@ $(function() {
 		return canSnap;
 	}
 
-	function searchBestSnap() {
-		var bestSnap; //　最もいい手を記録する
-		var avairableSnaps = [];
+	function searchBestMove() {
+		var bestMove; //　最もいい手を記録する
+		var avairableMove = [];
 		for(var i = 0; i < board.length; i++) {
 			if(flipDetection(i, turn)) {
-				avairableSnaps.push(i);
+				avairableMove.push(i);
 			}
 		}
 
-		// avairableSnapsからbestSnapを選ぶ
-		bestSnap = avairableSnaps[0];
-		for(var i = 0; i < avairableSnaps.length-1; i++) {
-			var tmpY1 = Math.floor(avairableSnaps[i]/boardSize);
-			var tmpY2 = Math.floor(avairableSnaps[i+1]/boardSize);
+		// avairableMoveからbestMoveを選ぶ
+		bestMove = avairableMove[0];
+		for(var i = 0; i < avairableMove.length-1; i++) {
+			var tmpY1 = Math.floor(avairableMove[i]/boardSize);
+			var tmpY2 = Math.floor(avairableMove[i+1]/boardSize);
 			if(tmp1 > tmp2) {
-				bestSnap = avairableSnaps[i+1];
+				bestMove = avairableMove[i+1];
 			} else if (tmp1 == tmp2) {
-				var tmpX1 = avairableSnaps[i] % boardSize;
-				var tmpX2 = avairableSnaps[i+1] % boardSize;
+				var tmpX1 = avairableMove[i] % boardSize;
+				var tmpX2 = avairableMove[i+1] % boardSize;
 				if(tmpx1 > tmpx2) {
-					bestSnap = avairableSnaps[i+1];
+					bestMove = avairableMove[i+1];
 				}
 			}
 		}
-		
-		return bestSnap;
+
+		return bestMove;
 	}
 
 	function flip(differentStones, myStone) { //未完成（バグあり）
