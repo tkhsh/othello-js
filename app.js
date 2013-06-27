@@ -50,13 +50,13 @@ $(function() {
 
 		//白の番か黒の番かを判定
 		if(turn) {
-			if(flipDetection(position, "black")) {
+			if(flipDetection(position, true)) {
 				board[position] = "●";
 				turn = false;
 				document.getElementById("turn").innerHTML = "白の番です。"
 			}
 		} else {
-			if(flipDetection(position, "white")) {
+			if(flipDetection(position, false)) {
 				board[position] = "○";
 				turn = true;
 				document.getElementById("turn").innerHTML = "黒の番です。"
@@ -70,10 +70,10 @@ $(function() {
 	function flipDetection(stonePos, myStoneColor) {
 		var myStone;
 		var oppositeStone;
-		if(myStoneColor == "black") {
+		if(myStoneColor == true) {
 			myStone = "●";
 			oppositeStone = "○";
-		} else　if(myStoneColor == "white") {
+		} else　if(myStoneColor == false) {
 			myStone = "○";
 			oppositeStone = "●";
 		}
