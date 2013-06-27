@@ -43,21 +43,32 @@ $(function() {
 
 		//白の番か黒の番かを判定
 		if(turn) {
-			if(flipDetection(position)) {
+			if(flipDetection(position, "black")) {
 				board[position] = "●";
 				turn = false;
 			}
 		} else {
-			board[position] = "○";
-			turn = true;
+			if(flipDetection(position, "white")) {
+				board[position] = "○";
+				turn = true;
+			}
 		}
 
 		draw();
 	});
 
 	//石がひっくり返るか判定
-	function flipDetection(stonePos) {
-		
+	function flipDetection(stonePos, myStoneColor) {
+		var myStone;
+		var oppositeStone;
+		if(myStoneColor == "black") {
+			myStone = "●";
+			oppositeStone = "○";
+		} else　if(myStoneColor == "white") {
+			myStone = "○";
+			oppositeStone = "●";
+		}
+
 		var canSnap = false; // 石がおけるか？
 
 		for(var dx = -1; dx <= 1; dx++) {
@@ -83,20 +94,20 @@ $(function() {
 					var boardNum = posY*4 + posX%4;
 					console.log(" boardNum:" + boardNum);
 
-					if(board[boardNum] == "○") { // 検索結果が異なる色（白と仮定）なら
+					if(board[boardNum] == oppositeStone) { // 検索結果が異なる色（白と仮定）なら
 						// このブロック内の処理（1.boardNum（座標）を記録 2.石が置ける　3.同じ方向にもう一マス進み、検索する。）
 
 						differentStones.push(boardNum); // 1を実装。differentStonesが空でなければ石は置けるとするので２の条件も満たす
-						//whileループが継続するので、「3.同じ方向にもう一マス進み、検索する」の条件を満たす。
+						// whileループが継続するので、「3.同じ方向にもう一マス進み、検索する」の条件を満たす。
 
-					} else if(board[boardNum] == "●") { // 検索結果が同じ色（黒と仮定）なら
+					} else if(board[boardNum] == myStone) { // 検索結果が同じ色（黒と仮定）なら
 						// このブロック内の処理（1.この方向の検索が終了 2.石が置けるなら、記録した座標の色を変える）
 						isContinueSearch = false; // 1を実装
 						if(differentStones.length != 0) { //2を実装
 							/////////////////////////関数に切り出したい処理///////////////////////////////
 							for(var i = 0; i < differentStones.length; i++) {
 								var tmp = differentStones[i];
-								board[tmp] = "●"; // 黒だと仮定
+								board[tmp] = myStone;
 							}
 							/////////////////////////////////////////////////////////
 							canSnap = true;
