@@ -7,11 +7,14 @@ $(function() {
 	for(var i = 0; i < board.length; i++) {
 		board[i] = "□";
 	}
-
 	board[5] = "○";
 	board[6] = "●";
 	board[9] = "●";
 	board[10] = "○";
+
+	function parsePosition(x, y) {
+		return y*4 + x%4;
+	}
 
 	// オセロ盤を表示する
 	function draw() {
