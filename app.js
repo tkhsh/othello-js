@@ -110,10 +110,6 @@ $(function() {
 					} else if(board[boardNum] == myStone) { // 検索結果が同じ色なら
 						isContinueSearch = false;
 						if(differentStones.length != 0) {
-							for(var i = 0; i < differentStones.length; i++) {
-								var tmp = differentStones[i];
-								board[tmp] = myStone;
-							}
 							canSnap = true;
 						}
 					} else { // 間にスペースのある場合
@@ -123,6 +119,13 @@ $(function() {
 			}
 		}
 		return canSnap;
+	}
+
+	function flip(differentStones, myStone) { //未完成（バグあり）
+		for(var i = 0; i < differentStones.length; i++) {
+			var tmp = differentStones[i];
+			board[tmp] = myStone;
+		}
 	}
 
 	draw();
