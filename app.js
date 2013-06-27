@@ -7,6 +7,7 @@ $(function() {
 	for(var i = 0; i < board.length; i++) {
 		board[i] = "□";
 	}
+
 	board[5] = "○";
 	board[6] = "●";
 	board[9] = "●";
@@ -78,7 +79,7 @@ $(function() {
 
 				var posX = stonePos%boardSize;
 				var posY = Math.floor(stonePos/boardSize); // 整数の値をとる
-				var isContinueSearch = true; // TODO:終了条件の追加（1.端まで来たとき 2.検索結果が●だったとき）
+				var isContinueSearch = true;
 				var differentStones = [];
 
 				while(isContinueSearch) {
@@ -96,22 +97,17 @@ $(function() {
 					var boardNum = posY*boardSize + posX%boardSize;
 					console.log(" boardNum:" + boardNum);
 
-					if(board[boardNum] == oppositeStone) { // 検索結果が異なる色（白と仮定）なら
-						// このブロック内の処理（1.boardNum（座標）を記録 2.石が置ける　3.同じ方向にもう一マス進み、検索する。）
+					if(board[boardNum] == oppositeStone) { // 検索結果が異なる色なら
+						differentStones.push(boardNum);
+						//同じ方向にもう一マス進み、検索する。
 
-						differentStones.push(boardNum); // 1を実装。differentStonesが空でなければ石は置けるとするので２の条件も満たす
-						// whileループが継続するので、「3.同じ方向にもう一マス進み、検索する」の条件を満たす。
-
-					} else if(board[boardNum] == myStone) { // 検索結果が同じ色（黒と仮定）なら
-						// このブロック内の処理（1.この方向の検索が終了 2.石が置けるなら、記録した座標の色を変える）
-						isContinueSearch = false; // 1を実装
-						if(differentStones.length != 0) { //2を実装
-							/////////////////////////関数に切り出したい処理///////////////////////////////
+					} else if(board[boardNum] == myStone) { // 検索結果が同じ色なら
+						isContinueSearch = false;
+						if(differentStones.length != 0) {
 							for(var i = 0; i < differentStones.length; i++) {
 								var tmp = differentStones[i];
 								board[tmp] = myStone;
 							}
-							/////////////////////////////////////////////////////////
 							canSnap = true;
 						}
 					} else { // 間にスペースのある場合
