@@ -53,11 +53,13 @@ $(function() {
 			if(flipDetection(position, "black")) {
 				board[position] = "●";
 				turn = false;
+				document.getElementById("turn").innerHTML = "白の番です。"
 			}
 		} else {
 			if(flipDetection(position, "white")) {
 				board[position] = "○";
 				turn = true;
+				document.getElementById("turn").innerHTML = "黒の番です。"
 			}
 		}
 
