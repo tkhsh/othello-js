@@ -7,10 +7,11 @@ $(function() {
 	for(var i = 0; i < board.length; i++) {
 		board[i] = "□";
 	}
-	board[5] = "○";
-	board[6] = "●";
-	board[9] = "●";
-	board[10] = "○";
+	var half = boardSize >> 1;
+	board[parsePosition(half-1, half-1) ] = "○";
+	board[parsePosition(half, half-1)] = "●";
+	board[parsePosition(half-1, half)] = "●";
+	board[parsePosition(half, half)] = "○";
 
 	function parsePosition(x, y) {
 		return y*4 + x%4;
