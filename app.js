@@ -34,19 +34,7 @@ $(function() {
 	var turn = true; // 順番を判定するフラグ
 	$('#snap').click(function () {
 		var tmpPosition = document.getElementById("position").value;
-
-		// エラーチェック
-		//1.valueは0~15までの数でなければならない
 		var position = parseInt(tmpPosition);
-		if(!(position >= 0 && position <= 15)) {
-			console.log("エラー：0~15までの半角の数を入力してください");
-			return;
-		}
-		//2.同じ場所には置けない
-		if(board[position] != "□") {
-			console.log("エラー：同じ場所には置けません");
-			return;
-		}
 
 		if(flipDetection(position, true)) {
 			//プレイヤーの順番
@@ -62,16 +50,22 @@ $(function() {
 			turn = true;
 			document.getElementById("turn").innerHTML = "黒の番です。"
 		}
-		
 
 		draw();
 	});
 
 	//石がひっくり返るか判定
 	function flipDetection(stonePos, myStoneColor) {
+		// エラーチェック
 		if(board[stonePos] != "□") {
+			console.log("エラー：同じ場所には置けません");
 			return false;
 		}
+		if(!(stonePos >= 0 && stonePos <= 15)) {
+			console.log("エラー：0~15までの半角の数を入力してください");
+			return false;
+		}
+
 		var myStone;
 		var oppositeStone;
 		if(myStoneColor == true) {
@@ -83,7 +77,6 @@ $(function() {
 		}
 
 		var canSnap = false; // 石がおけるか？
-		
 
 		for(var dx = -1; dx <= 1; dx++) {
 			for(var dy = -1; dy <= 1; dy++) {
