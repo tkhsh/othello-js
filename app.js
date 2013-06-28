@@ -54,8 +54,8 @@ $(function() {
 		draw();
 	});
 
-	//石がひっくり返るか判定
-	function flipDetection(stonePos, myStoneColor) {
+	//石が置けるか判定
+	function moveDetection(stonePos, myStoneColor) {
 		// エラーチェック
 		if(board[stonePos] != "□") {
 			console.log("エラー：同じ場所には置けません");
