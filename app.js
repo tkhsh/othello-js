@@ -136,26 +136,26 @@ $(function() {
 
 	function searchBestMove() {
 		var bestMove; //　最もいい手を記録する flipDetection(i, false)
-		var avairableMove = [];
+		var availableMoves = [];
 		for(var i = 0; i < board.length; i++) {
 			if(flipDetection(i, false)) {
 				console.log(i);
-				avairableMove.push(i);
+				availableMoves.push(i);
 			}
 		}
 
-		// avairableMoveからbestMoveを選ぶ
-		bestMove = avairableMove[0];
-		for(var i = 0; i < avairableMove.length-1; i++) {
-			var tmpY1 = Math.floor(avairableMove[i]/boardSize);
-			var tmpY2 = Math.floor(avairableMove[i+1]/boardSize);
+		// availableMovesからbestMoveを選ぶ
+		bestMove = availableMoves[0];
+		for(var i = 0; i < availableMoves.length-1; i++) {
+			var tmpY1 = Math.floor(availableMoves[i]/boardSize);
+			var tmpY2 = Math.floor(availableMoves[i+1]/boardSize);
 			if(tmpY1 > tmpY2) {
-				bestMove = avairableMove[i+1];
+				bestMove = availableMoves[i+1];
 			} else if (tmpY1 == tmpY2) {
-				var tmpX1 = avairableMove[i] % boardSize;
-				var tmpX2 = avairableMove[i+1] % boardSize;
+				var tmpX1 = availableMoves[i] % boardSize;
+				var tmpX2 = availableMoves[i+1] % boardSize;
 				if(tmpX1 > tmpX2) {
-					bestMove = avairableMove[i+1];
+					bestMove = availableMoves[i+1];
 				}
 			}
 		}
