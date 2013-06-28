@@ -89,8 +89,6 @@ $(function() {
 				while(isContinueSearch) {
 					posX += dx;
 					posY += dy;
-					console.log(dx + " dy:" + dy + " posX:" + posX);
-					console.log(" posY:" + posY);
 
 					if(posX < 0 || posX > boardSize) { //端まできたときにsearchを終了
 						break;
@@ -99,7 +97,6 @@ $(function() {
 					}
 
 					var boardNum = posY*boardSize + posX%boardSize;
-					console.log(" boardNum:" + boardNum);
 
 					if(board[boardNum] == oppositeStone) { // 検索結果が異なる色なら
 						differentStones.push(boardNum);
