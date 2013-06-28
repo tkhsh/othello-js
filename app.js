@@ -28,9 +28,11 @@ $(function() {
 		var moves = [];
 		for(var x = 0; x < boardSize; x++) {
 			for(var y = 0; y < boardSize; y++) {
+				
 				if(canMoveTo(boardCopy, turn, pos)) {
 					moves.push(
-							makeGameTree(makeAttackedBoard(boardCopy, turn, pos), nextPlayer(turn));
+							makeGameTree(makeAttackedBoard(boardCopy, turn, pos)),
+							nextPlayer(turn)
 						)
 				}
 			}
