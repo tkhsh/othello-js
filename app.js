@@ -116,28 +116,25 @@ $(function() {
 		return canSnap;
 	}
 
+	var highPriorityMoves = [0, 3, 12, 15]; //もっとも「優勢」になる手
+
 	function searchBestMove() {
 		var bestMove; //　最もいい手を記録する moveDetection(i, false)
 		var availableMoves = [];
-		for(var i = 0; i < board.length; i++) {
-			if(moveDetection(i, false)) {
-				console.log(i);
-				availableMoves.push(i);
+		for(var posNum = 0; posNum < board.length; posNum++) {
+			if(moveDetection(posNum, false)) {
+				console.log(posNum);
+				availableMoves.push(posNum);
 			}
 		}
 
-		// availableMovesからbestMoveを選ぶ
 		bestMove = availableMoves[0];
 		for(var i = 0; i < availableMoves.length-1; i++) {
-			var tmpY1 = Math.floor(availableMoves[i]/boardSize);
-			var tmpY2 = Math.floor(availableMoves[i+1]/boardSize);
-			if(tmpY1 > tmpY2) {
-				bestMove = availableMoves[i+1];
-			} else if (tmpY1 == tmpY2) {
-				var tmpX1 = availableMoves[i] % boardSize;
-				var tmpX2 = availableMoves[i+1] % boardSize;
-				if(tmpX1 > tmpX2) {
-					bestMove = availableMoves[i+1];
+			var tmp1 = availableMoves[i];
+			var tmp2 = availableMoves[i+1];
+			for(var j = 0; j < highPriorityMoves.length; j++) {
+				if(tmp2 == highPriorityMoves[j]) {
+					bestMove = tmp2;
 				}
 			}
 		}
