@@ -160,21 +160,26 @@ $(function() {
 
 	function searchBestMove() {
 		var bestMove; //　最もいい手を記録する canMoveTo(i, false)
-		var availableMoves = [];
+		/*
 		for(var posNum = 0; posNum < board.length; posNum++) {
 			if(canMoveTo(posNum, false)) {
 				console.log(posNum);
 				availableMoves.push(posNum);
 			}
 		}
+		*/
+		var boardCopy = board;
+		var gameTree = makeGameTree(boardCopy, turn);
+
 		// 置ける場所がない場合
-		if(availableMoves.length == 0) {
+		if(gameTree.moves.length == 0) {
 			return null;
 		} else {
-			bestMove = availableMoves[0];
+			bestMove = gameTree.moves.board;
 		}
 
-		// TODO:availableMovesの一つ一つの手について、４手先まで盤面を読む
+		// TODO:gameTreeを利用して、４手先まで盤面を読む
+
 		for(var i = 0; i < availableMoves.length-1; i++) {
 			var tmp1 = availableMoves[i];
 			var tmp2 = availableMoves[i+1];
