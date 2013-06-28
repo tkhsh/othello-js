@@ -36,7 +36,7 @@ $(function() {
 		var tmpPosition = document.getElementById("position").value;
 		var position = parseInt(tmpPosition);
 
-		if(flipDetection(position, true)) {
+		if(moveDetection(position, true)) {
 			//プレイヤーの順番
 			board[position] = "●";
 			flip(position, true)
@@ -117,10 +117,10 @@ $(function() {
 	}
 
 	function searchBestMove() {
-		var bestMove; //　最もいい手を記録する flipDetection(i, false)
+		var bestMove; //　最もいい手を記録する moveDetection(i, false)
 		var availableMoves = [];
 		for(var i = 0; i < board.length; i++) {
-			if(flipDetection(i, false)) {
+			if(moveDetection(i, false)) {
 				console.log(i);
 				availableMoves.push(i);
 			}
