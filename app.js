@@ -48,29 +48,21 @@ $(function() {
 			return;
 		}
 
-		//白の番か黒の番かを判定
-		if(turn) {
-			if(flipDetection(position, true)) {
-				board[position] = "●";
-				flip(position, true)
-				turn = false;
-				document.getElementById("turn").innerHTML = "白の番です。"
-			}
-		} else {
-			/*
-			if(flipDetection(position, false)) {
-				board[position] = "○";
-				flip(position, false)
-				turn = true;
-				document.getElementById("turn").innerHTML = "黒の番です。"
-			}
-			*/
+		if(flipDetection(position, true)) {
+			//プレイヤーの順番
+			board[position] = "●";
+			flip(position, true)
+			turn = false;
+			document.getElementById("turn").innerHTML = "白の番です。"
+
+			//computerの順番
 			var bestPos = searchBestMove();
 			board[bestPos] = "○";
 			flip(bestPos, false);
 			turn = true;
 			document.getElementById("turn").innerHTML = "黒の番です。"
 		}
+		
 
 		draw();
 	});
