@@ -50,7 +50,7 @@ $(function() {
 	}
 
 	function parsePosition(x, y) {
-		return y*4 + x%4;
+		return y*4 + x;
 	}
 
 	// オセロ盤を表示する
