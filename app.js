@@ -45,8 +45,12 @@ $(function() {
 
 			//computerの順番
 			var bestPos = searchBestMove();
-			board[bestPos] = "○";
-			flip(bestPos, false);
+			if(bestPos != null) {
+				board[bestPos] = "○";
+				flip(bestPos, false);	
+			} else {
+				// コンピューターはパス
+			}
 			turn = true;
 			document.getElementById("turn").innerHTML = "黒の番です。"
 		}
@@ -71,7 +75,7 @@ $(function() {
 		if(myStoneColor == true) {
 			myStone = "●";
 			oppositeStone = "○";
-		} else　if(myStoneColor == false) {
+		} else if(myStoneColor == false) {
 			myStone = "○";
 			oppositeStone = "●";
 		}
@@ -127,8 +131,14 @@ $(function() {
 				availableMoves.push(posNum);
 			}
 		}
+		// 置ける場所がない場合
+		if(availableMoves.length == 0) {
+			return null;
+		} else {
+			bestMove = availableMoves[0];
+		}
 
-		bestMove = availableMoves[0];
+		// TODO:availableMovesの一つ一つの手について、４手先まで盤面を読む
 		for(var i = 0; i < availableMoves.length-1; i++) {
 			var tmp1 = availableMoves[i];
 			var tmp2 = availableMoves[i+1];
@@ -154,7 +164,7 @@ $(function() {
 		if(myStoneColor == true) {
 			myStone = "●";
 			oppositeStone = "○";
-		} else　if(myStoneColor == false) {
+		} else if(myStoneColor == false) {
 			myStone = "○";
 			oppositeStone = "●";
 		}
