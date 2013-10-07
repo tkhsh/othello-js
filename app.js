@@ -71,7 +71,7 @@ $(function() {
 	});
 
 	//石が置けるか判定
-	function moveDetection(stonePos, myStoneColor) {
+	function moveDetection(stonePos, isPlayerTurn) {
 		// エラーチェック
 		if(board[stonePos] != "□") {
 			console.log("エラー：同じ場所には置けません");
@@ -82,7 +82,7 @@ $(function() {
 			return false;
 		}
 
-		var symbols = getSymbols(myStoneColor);
+		var symbols = getSymbols(isPlayerTurn);
 
 		var canSnap = false; // 石がおけるか？
 
@@ -156,14 +156,14 @@ $(function() {
 		return bestMove;
 	}
 
-	function flip(movePos, myStoneColor) {
+	function flip(movePos, isPlayerTurn) {
 		/*
 		for(var i = 0; i < differentStones.length; i++) {
 			var tmp = differentStones[i];
 			board[tmp] = myStone;
 		}
 		*/
-		var symbols = getSymbols(myStoneColor);
+		var symbols = getSymbols(isPlayerTurn);
 
 		for(var dx = -1; dx <= 1; dx++) {
 			for(var dy = -1; dy <= 1; dy++) {
