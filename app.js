@@ -11,6 +11,14 @@ $(function() {
 	var WhiteStone = "◯";
 	var BlackStone = "●";
 
+	function getSymbols(isPlayerTurn) {
+		if(isPlayerTurn) {
+			return { onesStone: BlackStone, oppositeStone: WhiteStone};
+		} else {
+			return { onesStone: WhiteStone, oppositeStone: BlackStone};
+		}
+	}
+
 	var half = boardSize >> 1;
 	board[parsePosition(half-1, half-1) ] = WhiteStone;
 	board[parsePosition(half, half-1)] = BlackStone;
@@ -74,15 +82,7 @@ $(function() {
 			return false;
 		}
 
-		var myStone;
-		var oppositeStone;
-		if(myStoneColor == true) {
-			myStone = BlackStone;
-			oppositeStone = WhiteStone;
-		} else if(myStoneColor == false) {
-			myStone = WhiteStone;
-			oppositeStone = BlackStone;
-		}
+		var symbols = getSymbols(myStoneColor);
 
 		var canSnap = false; // 石がおけるか？
 
@@ -106,11 +106,11 @@ $(function() {
 
 					var boardNum = posY*boardSize + posX%boardSize;
 
-					if(board[boardNum] == oppositeStone) { // 検索結果が異なる色なら
+					if(board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
 						differentStones.push(boardNum);
 						//同じ方向にもう一マス進み、検索する。
 
-					} else if(board[boardNum] == myStone) { // 検索結果が同じ色なら
+					} else if(board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
 						isContinueSearch = false;
 						if(differentStones.length != 0) {
 							canSnap = true;
@@ -163,15 +163,7 @@ $(function() {
 			board[tmp] = myStone;
 		}
 		*/
-		var myStone;
-		var oppositeStone;
-		if(myStoneColor == true) {
-			myStone = BlackStone;
-			oppositeStone = WhiteStone;
-		} else if(myStoneColor == false) {
-			myStone = WhiteStone;
-			oppositeStone = BlackStone;
-		}
+		var symbols = getSymbols(myStoneColor);
 
 		for(var dx = -1; dx <= 1; dx++) {
 			for(var dy = -1; dy <= 1; dy++) {
@@ -193,17 +185,17 @@ $(function() {
 					var boardNum = posY*boardSize + posX%boardSize;
 					console.log(" boardNum:" + boardNum);
 
-					if(board[boardNum] == oppositeStone) { // 検索結果が異なる色なら
+					if(board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
 						differentStones.push(boardNum);
 						//同じ方向にもう一マス進み、検索する。
 
-					} else if(board[boardNum] == myStone) { // 検索結果が同じ色なら
+					} else if(board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
 						isContinueSearch = false;
 						if(differentStones.length != 0) {
 							// canSnap = true;
 							for(var i = 0; i < differentStones.length; i++) {
 								var tmp = differentStones[i];
-								board[tmp] = myStone;
+								board[tmp] = symbols.onesStone;
 							}
 						}
 					} else { // 間にスペースのある場合
