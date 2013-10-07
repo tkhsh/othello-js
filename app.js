@@ -7,11 +7,15 @@ $(function() {
 	for(var i = 0; i < board.length; i++) {
 		board[i] = "□";
 	}
+	// 白石と黒石の記号
+	var WhiteStone = "◯";
+	var BlackStone = "●";
+
 	var half = boardSize >> 1;
-	board[parsePosition(half-1, half-1) ] = "○";
-	board[parsePosition(half, half-1)] = "●";
-	board[parsePosition(half-1, half)] = "●";
-	board[parsePosition(half, half)] = "○";
+	board[parsePosition(half-1, half-1) ] = WhiteStone;
+	board[parsePosition(half, half-1)] = BlackStone;
+	board[parsePosition(half-1, half)] = BlackStone;
+	board[parsePosition(half, half)] = WhiteStone;
 
 	function parsePosition(x, y) {
 		return y*4 + x%4;
@@ -38,7 +42,7 @@ $(function() {
 
 		if(moveDetection(position, true)) {
 			//プレイヤーの順番
-			board[position] = "●";
+			board[position] = BlackStone;
 			flip(position, true)
 			turn = false;
 			document.getElementById("turn").innerHTML = "白の番です。"
@@ -46,7 +50,7 @@ $(function() {
 			//computerの順番
 			var bestPos = searchBestMove();
 			if(bestPos != null) {
-				board[bestPos] = "○";
+				board[bestPos] = WhiteStone;
 				flip(bestPos, false);	
 			} else {
 				// コンピューターはパス
@@ -73,11 +77,11 @@ $(function() {
 		var myStone;
 		var oppositeStone;
 		if(myStoneColor == true) {
-			myStone = "●";
-			oppositeStone = "○";
+			myStone = BlackStone;
+			oppositeStone = WhiteStone;
 		} else if(myStoneColor == false) {
-			myStone = "○";
-			oppositeStone = "●";
+			myStone = WhiteStone;
+			oppositeStone = BlackStone;
 		}
 
 		var canSnap = false; // 石がおけるか？
@@ -162,11 +166,11 @@ $(function() {
 		var myStone;
 		var oppositeStone;
 		if(myStoneColor == true) {
-			myStone = "●";
-			oppositeStone = "○";
+			myStone = BlackStone;
+			oppositeStone = WhiteStone;
 		} else if(myStoneColor == false) {
-			myStone = "○";
-			oppositeStone = "●";
+			myStone = WhiteStone;
+			oppositeStone = BlackStone;
 		}
 
 		for(var dx = -1; dx <= 1; dx++) {
