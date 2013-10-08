@@ -48,7 +48,7 @@ $(function() {
 		var tmpPosition = document.getElementById("position").value;
 		var position = parseInt(tmpPosition);
 
-		if(moveDetection(position, true)) {
+		if(canAttack(position, true)) {
 			//プレイヤーの順番
 			board[position] = BlackStone;
 			flip(position, true)
@@ -71,7 +71,7 @@ $(function() {
 	});
 
 	//石が置けるか判定
-	function moveDetection(stonePos, isPlayerTurn) {
+	function canAttack(stonePos, isPlayerTurn) {
 		// エラーチェック
 		if(board[stonePos] != "□") {
 			console.log("エラー：同じ場所には置けません");
@@ -127,10 +127,10 @@ $(function() {
 	var highPriorityMoves = [0, 3, 12, 15]; //もっとも「優勢」になる手
 
 	function searchBestMove() {
-		var bestMove; //　最もいい手を記録する moveDetection(i, false)
+		var bestMove; //　最もいい手を記録する canAttack(i, false)
 		var availableMoves = [];
 		for(var posNum = 0; posNum < board.length; posNum++) {
-			if(moveDetection(posNum, false)) {
+			if(canAttack(posNum, false)) {
 				console.log(posNum);
 				availableMoves.push(posNum);
 			}
