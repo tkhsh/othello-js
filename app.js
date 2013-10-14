@@ -1,29 +1,34 @@
 $(function() {
-    //オセロ盤のサイズを定義
-    var boardSize = 4;
-    // オセロ盤のglobal変数
-    var board = new Array(boardSize*boardSize);
-    // オセロ盤を初期化
-    for(var i = 0; i < board.length; i++) {
-        board[i] = "□";
-    }
-    // 白石と黒石の記号
-    var WhiteStone = "◯";
-    var BlackStone = "●";
+    //ゲームの情報（もしくは設定）を保存する変数
+    var gameInfo = {};
+    
+    function initGame() {
+        gameInfo.boardSize = 4;
+        gameInfo.board = new Array(gameInfo.boardSize * gameInfo.boardSize);
+        gameInfo.whiteStone = "◯";
+        gameInfo.blackStone = "●";
+        gameInfo.space = "□";
 
+        // 盤面を空白記号で初期化
+        for(var i = 0; i<gameInfo.board.length; i++) {
+            gameInfo.board[i] = gameInfo.space;
+        }
+
+        // 白石と黒石を初期配置に置く
+        var half = gameInfo.boardSize >> 1;
+        gameInfo.board[parsePosition(half-1, half-1) ] = gameInfo.whiteStone;
+        gameInfo.board[parsePosition(half, half-1)] = gameInfo.blackStone;
+        gameInfo.board[parsePosition(half-1, half)] = gameInfo.blackStone;
+        gameInfo.board[parsePosition(half, half)] = gameInfo.whiteStone;
+    }
+    
     function getSymbols(isPlayerTurn) {
         if(isPlayerTurn) {
-            return { onesStone: BlackStone, oppositeStone: WhiteStone};
+            return { onesStone: gameInfo.blackStone, oppositeStone: gameInfo.whiteStone};
         } else {
-            return { onesStone: WhiteStone, oppositeStone: BlackStone};
+            return { onesStone: gameInfo.whiteStone, oppositeStone: gameInfo.blackStone};
         }
     }
-
-    var half = boardSize >> 1;
-    board[parsePosition(half-1, half-1) ] = WhiteStone;
-    board[parsePosition(half, half-1)] = BlackStone;
-    board[parsePosition(half-1, half)] = BlackStone;
-    board[parsePosition(half, half)] = WhiteStone;
 
     function parsePosition(x, y) {
         return y*4 + x;
@@ -33,11 +38,11 @@ $(function() {
     function draw() {
         // 配列boardをStringに変換
         var boardStr = "";
-        for(var i = 0; i < board.length; i++) { 
-            if(i%boardSize == 0) {
+        for(var i = 0; i < gameInfo.board.length; i++) { 
+            if(i%gameInfo.boardSize == 0) {
                 boardStr += "\n"
             }
-            boardStr += board[i];
+            boardStr += gameInfo.board[i];
         }
         // pre要素に表示させる
         document.getElementById("display").innerHTML = boardStr;
@@ -47,10 +52,9 @@ $(function() {
     $('#snap').click(function () {
         var tmpPosition = document.getElementById("position").value;
         var position = parseInt(tmpPosition);
-
         if(canAttack(position, true)) {
             //プレイヤーの順番
-            board[position] = BlackStone;
+            gameInfo.board[position] = gameInfo.blackStone;
             flip(position, true)
             turn = false;
             document.getElementById("turn").innerHTML = "白の番です。"
@@ -58,7 +62,7 @@ $(function() {
             //computerの順番
             var bestPos = searchBestMove();
             if(bestPos != null) {
-                board[bestPos] = WhiteStone;
+                gameInfo.board[bestPos] = gameInfo.whiteStone;
                 flip(bestPos, false);   
             } else {
                 // コンピューターはパス
@@ -73,7 +77,7 @@ $(function() {
     //石が置けるか判定
     function canAttack(stonePos, isPlayerTurn) {
         // エラーチェック
-        if(board[stonePos] != "□") {
+        if(gameInfo.board[stonePos] != gameInfo.space) {
             console.log("エラー：同じ場所には置けません");
             return false;
         }
@@ -89,8 +93,8 @@ $(function() {
         for(var dx = -1; dx <= 1; dx++) {
             for(var dy = -1; dy <= 1; dy++) {
 
-                var posX = stonePos%boardSize;
-                var posY = Math.floor(stonePos/boardSize); // 整数の値をとる
+                var posX = stonePos%gameInfo.boardSize;
+                var posY = Math.floor(stonePos/gameInfo.boardSize); // 整数の値をとる
                 var isContinueSearch = true;
                 var differentStones = [];
 
@@ -98,19 +102,19 @@ $(function() {
                     posX += dx;
                     posY += dy;
 
-                    if(posX < 0 || posX > boardSize) { //端まできたときにsearchを終了
+                    if(posX < 0 || posX > gameInfo.boardSize) { //端まできたときにsearchを終了
                         break;
-                    } else if (posY < 0 || posY > boardSize) {
+                    } else if (posY < 0 || posY > gameInfo.boardSize) {
                         break;
                     }
 
-                    var boardNum = posY*boardSize + posX%boardSize;
+                    var boardNum = posY*gameInfo.boardSize + posX%gameInfo.boardSize;
 
-                    if(board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
+                    if(gameInfo.board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
                         differentStones.push(boardNum);
                         //同じ方向にもう一マス進み、検索する。
 
-                    } else if(board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
+                    } else if(gameInfo.board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
                         isContinueSearch = false;
                         if(differentStones.length != 0) {
                             canSnap = true;
@@ -129,7 +133,7 @@ $(function() {
     function searchBestMove() {
         var bestMove; //　最もいい手を記録する canAttack(i, false)
         var availableMoves = [];
-        for(var posNum = 0; posNum < board.length; posNum++) {
+        for(var posNum = 0; posNum < gameInfo.board.length; posNum++) {
             if(canAttack(posNum, false)) {
                 console.log(posNum);
                 availableMoves.push(posNum);
@@ -167,8 +171,8 @@ $(function() {
 
         for(var dx = -1; dx <= 1; dx++) {
             for(var dy = -1; dy <= 1; dy++) {
-                var posX = movePos%boardSize;
-                var posY = Math.floor(movePos/boardSize); // 整数の値をとる
+                var posX = movePos%gameInfo.boardSize;
+                var posY = Math.floor(movePos/gameInfo.boardSize); // 整数の値をとる
                 var isContinueSearch = true;
                 var differentStones = [];
 
@@ -176,26 +180,26 @@ $(function() {
                     posX += dx;
                     posY += dy;
 
-                    if(posX < 0 || posX > boardSize) { //端まできたときにsearchを終了
+                    if(posX < 0 || posX > gameInfo.boardSize) { //端まできたときにsearchを終了
                         break;
-                    } else if (posY < 0 || posY > boardSize) {
+                    } else if (posY < 0 || posY > gameInfo.boardSize) {
                         break;
                     }
 
-                    var boardNum = posY*boardSize + posX%boardSize;
+                    var boardNum = posY*gameInfo.boardSize + posX%gameInfo.boardSize;
                     console.log(" boardNum:" + boardNum);
 
-                    if(board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
+                    if(gameInfo.board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
                         differentStones.push(boardNum);
                         //同じ方向にもう一マス進み、検索する。
 
-                    } else if(board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
+                    } else if(gameInfo.board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
                         isContinueSearch = false;
                         if(differentStones.length != 0) {
                             // canSnap = true;
                             for(var i = 0; i < differentStones.length; i++) {
                                 var tmp = differentStones[i];
-                                board[tmp] = symbols.onesStone;
+                                gameInfo.board[tmp] = symbols.onesStone;
                             }
                         }
                     } else { // 間にスペースのある場合
@@ -206,5 +210,6 @@ $(function() {
         }
     }
 
+    initGame();
     draw();
 });
