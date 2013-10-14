@@ -107,7 +107,7 @@ $(function() {
 
         for(var i = 0; i < gameInfo.directions.length; i++) {
             var posX = position%gameInfo.boardSize;
-            var posY = Math.floor(position/gameInfo.boardSize); // 整数の値をとる
+            var posY = Math.floor(position/gameInfo.boardSize);
             var isContinueSearch = true;
             var differentStones = [];
 
@@ -132,7 +132,7 @@ $(function() {
                         canMoveTo = true;
                     }
                 } else { // 間にスペースのある場合
-                    isContinueSearch = false;   // 石が置けない
+                    isContinueSearch = false;
                 }
             }
         }
@@ -172,18 +172,12 @@ $(function() {
     }
 
     function flip(movePos, isPlayerTurn) {
-        /*
-        for(var i = 0; i < differentStones.length; i++) {
-            var tmp = differentStones[i];
-            board[tmp] = myStone;
-        }
-        */
         var symbols = getSymbols(isPlayerTurn);
 
         for(var dx = -1; dx <= 1; dx++) {
             for(var dy = -1; dy <= 1; dy++) {
                 var posX = movePos%gameInfo.boardSize;
-                var posY = Math.floor(movePos/gameInfo.boardSize); // 整数の値をとる
+                var posY = Math.floor(movePos/gameInfo.boardSize);
                 var isContinueSearch = true;
                 var differentStones = [];
 
