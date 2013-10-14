@@ -8,6 +8,16 @@ $(function() {
         gameInfo.whiteStone = "◯";
         gameInfo.blackStone = "●";
         gameInfo.space = "□";
+        gameInfo.directions = [
+            {dx: -1, dy:  1},
+            {dx:  0, dy:  1}, 
+            {dx:  1, dy:  1},
+            {dx:  1, dy:  0}, 
+            {dx:  1, dy: -1}, 
+            {dx:  0, dy: -1}, 
+            {dx: -1, dy: -1}, 
+            {dx:  1, dy:  0}
+        ];
 
         // 盤面を空白記号で初期化
         for(var i = 0; i<gameInfo.board.length; i++) {
@@ -95,37 +105,34 @@ $(function() {
         var canMoveTo = false;
         var symbols = getSymbols(isPlayerTurn);
 
-        for(var dx = -1; dx <= 1; dx++) {
-            for(var dy = -1; dy <= 1; dy++) {
-                var posX = position%gameInfo.boardSize;
-                var posY = Math.floor(position/gameInfo.boardSize); // 整数の値をとる
-                var isContinueSearch = true;
-                var differentStones = [];
+        for(var i = 0; i < gameInfo.directions.length; i++) {
+            var posX = position%gameInfo.boardSize;
+            var posY = Math.floor(position/gameInfo.boardSize); // 整数の値をとる
+            var isContinueSearch = true;
+            var differentStones = [];
 
-                while(isContinueSearch) {
-                    posX += dx;
-                    posY += dy;
+            while(isContinueSearch) {
+                posX += gameInfo.directions[i].dx;
+                posY += gameInfo.directions[i].dy;
 
-                    if(posX < 0 || posX > gameInfo.boardSize) { //端まできたときにsearchを終了
-                        break;
-                    } else if (posY < 0 || posY > gameInfo.boardSize) {
-                        break;
+                if(posX < 0 || posX > gameInfo.boardSize) { //端まできたときにsearchを終了
+                    break;
+                } else if (posY < 0 || posY > gameInfo.boardSize) {
+                    break;
+                }
+
+                var boardNum = posY*gameInfo.boardSize + posX%gameInfo.boardSize;
+
+                if(gameInfo.board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
+                    differentStones.push(boardNum);
+                    //同じ方向にもう一マス進み、検索する。
+                } else if(gameInfo.board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
+                    isContinueSearch = false;
+                    if(differentStones.length != 0) {
+                        canMoveTo = true;
                     }
-
-                    var boardNum = posY*gameInfo.boardSize + posX%gameInfo.boardSize;
-
-                    if(gameInfo.board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
-                        differentStones.push(boardNum);
-                        //同じ方向にもう一マス進み、検索する。
-
-                    } else if(gameInfo.board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
-                        isContinueSearch = false;
-                        if(differentStones.length != 0) {
-                            canMoveTo = true;
-                        }
-                    } else { // 間にスペースのある場合
-                        isContinueSearch = false;   // 石が置けない
-                    }
+                } else { // 間にスペースのある場合
+                    isContinueSearch = false;   // 石が置けない
                 }
             }
         }
