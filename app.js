@@ -96,14 +96,15 @@ $(function() {
             return false;
         }
 
-        var canSnap = searchAllDirections(stonePos, isPlayerTurn);
+        var result = searchAllDirections(stonePos, isPlayerTurn);
 
-        return canSnap;
+        return result.canMoveTo;
     }
 
     function searchAllDirections(position, isPlayerTurn) {
         var canMoveTo = false;
         var symbols = getSymbols(isPlayerTurn);
+        var flipableStones = [];
 
         for(var i = 0; i < gameInfo.directions.length; i++) {
             var posX = position%gameInfo.boardSize;
@@ -130,13 +131,17 @@ $(function() {
                     isContinueSearch = false;
                     if(differentStones.length != 0) {
                         canMoveTo = true;
+                        flipableStones = flipableStones.concat(differentStones);
                     }
                 } else { // 間にスペースのある場合
                     isContinueSearch = false;
                 }
             }
         }
-        return canMoveTo;
+        return {
+            canMoveTo: canMoveTo,
+            flipableStones: flipableStones
+        };
     }
 
     var highPriorityMoves = [0, 3, 12, 15]; //もっとも「優勢」になる手
@@ -174,44 +179,10 @@ $(function() {
     function flip(movePos, isPlayerTurn) {
         var symbols = getSymbols(isPlayerTurn);
 
-        for(var dx = -1; dx <= 1; dx++) {
-            for(var dy = -1; dy <= 1; dy++) {
-                var posX = movePos%gameInfo.boardSize;
-                var posY = Math.floor(movePos/gameInfo.boardSize);
-                var isContinueSearch = true;
-                var differentStones = [];
-
-                while(isContinueSearch) {
-                    posX += dx;
-                    posY += dy;
-
-                    if(posX < 0 || posX > gameInfo.boardSize) { //端まできたときにsearchを終了
-                        break;
-                    } else if (posY < 0 || posY > gameInfo.boardSize) {
-                        break;
-                    }
-
-                    var boardNum = posY*gameInfo.boardSize + posX%gameInfo.boardSize;
-                    console.log(" boardNum:" + boardNum);
-
-                    if(gameInfo.board[boardNum] == symbols.oppositeStone) { // 検索結果が異なる色なら
-                        differentStones.push(boardNum);
-                        //同じ方向にもう一マス進み、検索する。
-
-                    } else if(gameInfo.board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
-                        isContinueSearch = false;
-                        if(differentStones.length != 0) {
-                            // canSnap = true;
-                            for(var i = 0; i < differentStones.length; i++) {
-                                var tmp = differentStones[i];
-                                gameInfo.board[tmp] = symbols.onesStone;
-                            }
-                        }
-                    } else { // 間にスペースのある場合
-                        isContinueSearch = false;   // 石が置けない
-                    }
-                }
-            }
+        var result = searchAllDirections(movePos, isPlayerTurn);
+        for(var i = 0; i < result.flipableStones.length; i++) {
+            var tmp = result.flipableStones[i];
+            gameInfo.board[tmp] = symbols.onesStone;
         }
     }
 
