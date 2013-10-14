@@ -86,15 +86,19 @@ $(function() {
             return false;
         }
 
-        var symbols = getSymbols(isPlayerTurn);
+        var canSnap = searchAllDirections(stonePos, isPlayerTurn);
 
-        var canSnap = false; // 石がおけるか？
+        return canSnap;
+    }
+
+    function searchAllDirections(position, isPlayerTurn) {
+        var canMoveTo = false;
+        var symbols = getSymbols(isPlayerTurn);
 
         for(var dx = -1; dx <= 1; dx++) {
             for(var dy = -1; dy <= 1; dy++) {
-
-                var posX = stonePos%gameInfo.boardSize;
-                var posY = Math.floor(stonePos/gameInfo.boardSize); // 整数の値をとる
+                var posX = position%gameInfo.boardSize;
+                var posY = Math.floor(position/gameInfo.boardSize); // 整数の値をとる
                 var isContinueSearch = true;
                 var differentStones = [];
 
@@ -117,7 +121,7 @@ $(function() {
                     } else if(gameInfo.board[boardNum] == symbols.onesStone) { // 検索結果が同じ色なら
                         isContinueSearch = false;
                         if(differentStones.length != 0) {
-                            canSnap = true;
+                            canMoveTo = true;
                         }
                     } else { // 間にスペースのある場合
                         isContinueSearch = false;   // 石が置けない
@@ -125,7 +129,7 @@ $(function() {
                 }
             }
         }
-        return canSnap;
+        return canMoveTo;
     }
 
     var highPriorityMoves = [0, 3, 12, 15]; //もっとも「優勢」になる手
